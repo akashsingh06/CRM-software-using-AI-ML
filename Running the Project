@@ -1,0 +1,26 @@
+1. Start the backend:
+cd backend
+uvicorn app.main:app --reload
+
+2.Start the frontend:
+cd frontend
+npm start
+
+3.Access the application:
+Open http://localhost:3000 in your browser
+
+Login with admin credentials (admin@example.com / admin123)
+
+This implementation provides all the features you requested:
+
+AI-powered lead scoring
+
+Customer segmentation
+
+Analytics dashboard
+
+Secure authentication
+
+CSV import/export
+
+Local-first deployment with SQLite
