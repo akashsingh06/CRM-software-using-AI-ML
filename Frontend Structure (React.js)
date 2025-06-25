@@ -1,0 +1,173 @@
+All files are in this
+
+1. Main App Component
+frontend/src/App.js
+
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
+import Dashboard from './pages/Dashboard';
+import Leads from './pages/Leads';
+import Customers from './pages/Customers';
+import Analytics from './pages/Analytics';
+import Login from './pages/Login';
+import Navbar from './components/Navbar';
+
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <div className="min-h-screen bg-gray-100">
+          <Navbar />
+          <div className="container mx-auto px-4 py-8">
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+              <Route path="/leads" element={<PrivateRoute><Leads /></PrivateRoute>} />
+              <Route path="/customers" element={<PrivateRoute><Customers /></PrivateRoute>} />
+              <Route path="/analytics" element={<PrivateRoute><Analytics /></PrivateRoute>} />
+            </Routes>
+          </div>
+        </div>
+      </AuthProvider>
+    </Router>
+  );
+}
+
+export default App;
+
+
+2. Lead Scoring Component
+frontend/src/components/LeadScore.jsx
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import api from '../api';
+
+const LeadScore = ({ leadId }) => {
+  const { authToken } = useAuth();
+  const [score, setScore] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchLeadScore = async () => {
+      try {
+        const response = await api.get(`/leads/${leadId}/score`, {
+          headers: { Authorization: `Bearer ${authToken}` }
+        });
+        setScore(response.data.score);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLeadScore();
+  }, [leadId, authToken]);
+
+  const getScoreColor = (score) => {
+    if (score >= 0.8) return 'bg-green-500';
+    if (score >= 0.5) return 'bg-yellow-500';
+    return 'bg-red-500';
+  };
+
+  if (loading) return <div>Loading score...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div className="flex items-center">
+      <div className="w-full bg-gray-200 rounded-full h-2.5">
+        <div 
+          className={`h-2.5 rounded-full ${getScoreColor(score)}`} 
+          style={{ width: `${score * 100}%` }}
+        ></div>
+      </div>
+      <span className="ml-2 text-sm font-medium">
+        {(score * 100).toFixed(1)}%
+      </span>
+    </div>
+  );
+};
+
+export default LeadScore;
+
+
+3. Customer Segmentation Visualization
+frontend/src/components/SegmentationChart.jsx
+
+import React, { useState, useEffect } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { useAuth } from '../context/AuthContext';
+import api from '../api';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+const SegmentationChart = () => {
+  const { authToken } = useAuth();
+  const [segments, setSegments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSegments = async () => {
+      try {
+        const response = await api.get('/analytics/segments', {
+          headers: { Authorization: `Bearer ${authToken}` }
+        });
+        setSegments(response.data);
+      } catch (error) {
+        console.error('Error fetching segments:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSegments();
+  }, [authToken]);
+
+  const data = {
+    labels: segments.map(segment => segment.name),
+    datasets: [
+      {
+        label: 'Customer Count',
+        data: segments.map(segment => segment.count),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.7)',
+          'rgba(54, 162, 235, 0.7)',
+          'rgba(255, 206, 86, 0.7)',
+          'rgba(75, 192, 192, 0.7)',
+          'rgba(153, 102, 255, 0.7)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Customer Segmentation',
+      },
+    },
+  };
+
+  if (loading) return <div>Loading segments...</div>;
+
+  return <Bar data={data} options={options} />;
+};
+
+export default SegmentationChart;
