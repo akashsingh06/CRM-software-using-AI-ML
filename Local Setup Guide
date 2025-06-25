@@ -1,1 +1,134 @@
+Prerequisites
+Python 3.9+
+
+Node.js 16+
+
+pip
+
+virtualenv (recommended)
+
+**1. Project Structure**
+ai-crm/
+├── backend/               # FastAPI backend
+│   ├── app/               # Main application
+│   ├── models/            # ML models
+│   ├── tests/             # Tests
+│   └── requirements.txt   # Python dependencies
+├── frontend/              # React frontend
+│   ├── public/            # Static files
+│   ├── src/               # React source
+│   └── package.json       # Frontend dependencies
+├── data/                  # Sample data
+└── README.md              # Project documentation
+
+2. Backend Setup
+Clone the repository:
+git clone https://github.com/yourusername/ai-powered-crm.git
+cd ai-powered-crm
+
+Set up Python environment:
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+Configure environment variables:
+Create a .env file in the backend directory:
+DATABASE_URL=sqlite:///./crm.db
+JWT_SECRET_KEY=your-secret-key-here
+JWT_ALGORITHM=HS256
+
+Initialize database:
+python -m app.db.init_db
+
+Train initial ML models:
+python -m app.models.train_models
+
+Run the backend:
+uvicorn app.main:app --reload
+
+
+3. Frontend Setup
+   In a new terminal window:
+   cd frontend
+npm install
+
+
+Configure API endpoint:
+ Create a .env file in the frontend directory:
+REACT_APP_API_URL=http://localhost:8000
+Run the frontend:
+npm start
+
+
+4. Access the Application
+Frontend: http://localhost:3000
+
+Backend API docs: http://localhost:8000/docs
+
+Admin credentials (initial setup):
+
+Email: admin@example.com
+
+Password: admin123
+
+5. Sample Data Import
+To import sample leads and customers:
+
+python -m app.utils.import_sample_data
+
+Key Features Available Locally
+Lead Management
+
+Add/edit leads
+
+View lead scores (ML-powered)
+
+Filter by conversion probability
+
+Customer Segmentation
+
+View automatically generated segments
+
+Filter by behavioral clusters
+
+Dashboard
+
+Real-time sales pipeline
+
+Conversion rate analytics
+
+Lead source breakdown
+
+User Authentication
+
+Secure login/logout
+
+JWT token management
+
+Role-based access
+
+Troubleshooting
+Common issues and solutions:
+
+Database connection problems:
+
+Delete the crm.db file and re-run the init command
+
+Check SQLite is installed: sqlite3 --version
+
+ML model training fails:
+
+Ensure you have scikit-learn 1.0+ installed
+
+Check the data/sample_leads.csv exists
+
+Frontend not connecting to backend:
+
+Verify both servers are running
+
+Check CORS settings in backend/app/main.py
+
+Ensure the API URL in frontend .env is correct
+
 
