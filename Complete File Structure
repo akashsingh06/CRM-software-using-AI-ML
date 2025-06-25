@@ -1,0 +1,69 @@
+ai-crm/
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── core/
+│   │   │   ├── auth.py
+│   │   │   ├── config.py
+│   │   │   └── security.py
+│   │   ├── db/
+│   │   │   ├── database.py
+│   │   │   ├── crud/
+│   │   │   │   ├── users.py
+│   │   │   │   ├── leads.py
+│   │   │   │   └── customers.py
+│   │   │   └── models.py
+│   │   ├── models/
+│   │   │   ├── lead_scoring.py
+│   │   │   ├── customer_segmentation.py
+│   │   │   └── __init__.py
+│   │   ├── routers/
+│   │   │   ├── auth.py
+│   │   │   ├── users.py
+│   │   │   ├── leads.py
+│   │   │   ├── customers.py
+│   │   │   └── analytics.py
+│   │   ├── schemas/
+│   │   │   ├── users.py
+│   │   │   ├── leads.py
+│   │   │   └── customers.py
+│   │   └── utils/
+│   │       ├── import_export.py
+│   │       └── sample_data.py
+│   ├── requirements.txt
+│   └── .env
+├── frontend/
+│   ├── public/
+│   │   ├── index.html
+│   │   └── favicon.ico
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Auth/
+│   │   │   │   ├── PrivateRoute.jsx
+│   │   │   │   └── AuthRoute.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── LeadCard.jsx
+│   │   │   ├── LeadScore.jsx
+│   │   │   ├── CustomerCard.jsx
+│   │   │   ├── SegmentationChart.jsx
+│   │   │   └── AnalyticsCard.jsx
+│   │   ├── context/
+│   │   │   └── AuthContext.js
+│   │   ├── pages/
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── Leads.jsx
+│   │   │   ├── Customers.jsx
+│   │   │   ├── Analytics.jsx
+│   │   │   └── Login.jsx
+│   │   ├── api/
+│   │   │   └── index.js
+│   │   ├── App.js
+│   │   ├── index.js
+│   │   └── tailwind.config.js
+│   ├── package.json
+│   └── .env
+├── data/
+│   ├── leads.csv
+│   └── customers.csv
+└── README.md
