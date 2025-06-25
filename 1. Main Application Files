@@ -1,0 +1,31 @@
+backend/app/main.py
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from app.routers import users, leads, customers, auth, analytics
+from app.db.database import engine, SessionLocal
+from app.models import models
+from app.core.config import settings
+
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="AI-Powered CRM", version="1.0")
+
+# CORS settings
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include routers
+app.include_router(auth.router)
+app.include_router(users.router)
+app.include_router(leads.router)
+app.include_router(customers.router)
+app.include_router(analytics.router)
+
+@app.get("/")
+def read_root():
+    return {"message": "AI-Powered CRM API"}
