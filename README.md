@@ -1,6 +1,3 @@
-# CRM-software-using-AI-ML
-AI-powered CRM for smart customer and lead management with ML-based scoring &amp; segmentation.
-
 # CRM Software using AI/ML
 
 This project is a lightweight Customer Relationship Management (CRM) software that leverages AI/ML for intelligent customer handling, lead scoring, and sales prediction. Built for scalability and easy local setup.
@@ -42,4 +39,11 @@ pip install -r requirements.txt
 # python manage.py migrate
 uvicorn app.main:app --reload     # FastAPI server
 
+**Prerequisites**
+Python 3.9+
 
+Node.js 16+
+
+pip
+
+virtualenv (recommended)
